@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>Kaart</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+ <style>
+   body {padding: 0; margin: 0; }
+   html, body { height: 100%; width: 100%;}
+   #kaardikiht {float:bottom; width:600px; height:400px;}
+ </style>
+ <script>
+   let kaart;
+   let keskmarker, marker2;
+   let keskused={
+      "Viljandi coop":L.latLng(58.36510719195474, 25.602976753433335),
+	  "Grossi toidukaubad":L.latLng(58.36778713879969, 25.588569588044138),
+	  "Rimi Hyper":L.latLng(58.370027977535635, 25.59795450119224),
+	  "Centrumi selver":L.latLng(58.36767649937772, 25.59770455349586),
+	  "A1000 market":L.latLng(58.3680030361913, 25.60079613744864),
+	  "R-Kiosk":L.latLng(58.36944102546651, 25.59909587930011),
+	  "Maxima X":L.latLng(58.362311564394396, 25.58423907515702),
+	  "Maximarket":L.latLng(58.37086351202016, 25.584948009806656),
+	  "Uueveski konsum":L.latLng(58.37007011137484, 25.613018010095058)
+   }
+   
+   function algus(){
+    kaart = L.map('kaardikiht').setView([58.421887, 25.654736], 10);
+      new L.TileLayer(  'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=DIGIHUMANITAARIA', {
+	  attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+	  tms: true,
+    }).addTo(kaart);
+	marker2=L.marker([58.421887, 25.654736], {draggable: true});
+	marker2.addTo(kaart);
+	marker2.on("move", liigub)
+   }
+   function liigub(){
+        let vastused=[]
+		for(let koht in keskused){
+		  vastused.push([keskused[koht].distanceTo(marker2.getLatLng()), koht]);
+		}
+		vastused.sort((a, b) => a[0]-b[0]);
+		vastus.innerText="Lähim: "+vastused[0][1]+", "+
+		    Math.round(vastused[0][0])+"m";
+
+   }
+
+  </script>
+ </head>  
+ <body onload="algus()">
+  <div id="kaardikiht"></div>
+  <div id="vastus">abc</div>
+ </body>
+</html>
